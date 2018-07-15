@@ -1,9 +1,19 @@
 pragma solidity ^0.4.24;
 
-
 contract Betting {
-    /* Constructor function, where owner and outcomes are set */
-    function Betting(uint[] _outcomes) public {
+    address public owner;
+    address public gamblerA;
+    address public gamblerB;
+    address public oracle;
+    mapping (address => Bet) bets;
+    mapping (address => uint) winnings;
+    mapping (uint => uint) public outcomes;
+
+    constructor(uint[] _outcomes) public {
+        owner = msg.sender;
+        for (uint i = 0; i < _outcomes.length; i++) {
+            outcomes[i] = _outcomes[i];
+        }
     }
 
     /* Fallback function */
@@ -11,25 +21,12 @@ contract Betting {
         revert();
     }
 
-    /* Standard state variables */
-    address public owner;
-    address public gamblerA;
-    address public gamblerB;
-    address public oracle;
-
     /* Structs are custom data structures with self-defined parameters */
     struct Bet {
         uint outcome;
         uint amount;
         bool initialized;
     }
-
-    /* Keep track of every gambler's bet */
-    mapping (address => Bet) bets;
-    /* Keep track of every player's winnings (if any) */
-    mapping (address => uint) winnings;
-    /* Keep track of all outcomes (maps index to numerical outcome) */
-    mapping (uint => uint) public outcomes;
 
     /* Add any events you think are necessary */
     event BetMade(address gambler);
