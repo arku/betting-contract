@@ -33,12 +33,17 @@ contract Betting {
     event BetClosed();
 
     /* Uh Oh, what are these? */
-    modifier ownerOnly() {_;}
+    modifier ownerOnly() {
+        require(msg.sender == owner);
+        _;
+    }
+
     modifier oracleOnly() {_;}
     modifier outcomeExists(uint outcome) {_;}
 
-    /* Owner chooses their trusted Oracle */
     function chooseOracle(address _oracle) public ownerOnly() returns (address) {
+        oracle = _oracle;
+        return oracle;
     }
 
     /* Gamblers place their bets, preferably after calling checkOutcomes */
